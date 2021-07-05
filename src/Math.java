@@ -39,6 +39,13 @@ public class Math {
         this.buf = a;
     }
 
+    public void setExp (int i, String s) {
+        if (exp.size() < i) {
+            exp.add(s);
+        } else exp.set(i, s);
+
+
+    }
 
     public void append (String a) {
         buf += a;
@@ -53,14 +60,18 @@ public class Math {
     }
 
     public void addToList (String expr) {
-        exp.add(expr);
-        buf = "";
+        //if (expr != null) {
+            exp.add(expr);
+            buf = "";
+        //}
     }
 
     public void printList () {
+        int i = 0;
         System.out.println("-------");
         for (String s : exp) {
-            System.out.println(s);
+            System.out.println(i + ": " + s);
+            i ++;
         }
     }
 
@@ -82,32 +93,37 @@ public class Math {
     }
 
     public double calculate () {
-        printList();
 
-        for (int i = 0; i < exp.size(); i ++) {
+        /*if (!buf.equals("")) {
+            addToList(buf);
+        }
+         */
+        printList();
+        System.out.println("size" + exp.size());
+        /*for (int i = 0; i < exp.size(); i ++) {
             if (exp.get(i).equals(null)) {
                 exp.remove(i);
             }
         }
 
+         */
+
         if (exp.size() == 1) { System.out.println("Eredmény: " + result);
             return result;
         }
 
-        for (int i = 1; i < exp.size() - 1; i += 3) {
-            if (exp.get(i).equals("/")) {
-                System.out.println("true" + exp.get(1).equals(null));
-                System.out.println("size: " + exp.size());
-                result = divide(Double.parseDouble(exp.get(i - 1)),Double.parseDouble(exp.get(i + 1)));
+        for (int i = 1; i < exp.size() - 1; i += 2) {
+            if (exp.get(i).contains("*")) {
+                System.out.println("szorzás");
+                result = multiply(Double.parseDouble(exp.get(i - 1)),Double.parseDouble(exp.get(i + 1)));
                 exp.remove(i + 1);
                 exp.remove(i);
                 exp.remove(i - 1);
                 exp.add(i - 1, Double.toString(result));
                 calculate();
-            }else if (exp.get(i).equals("*")) {
-                System.out.println("true" + exp.get(1).equals(null));
-                System.out.println("size: " + exp.size());
-                result = multiply(Double.parseDouble(exp.get(i - 1)),Double.parseDouble(exp.get(i + 1)));
+            } else if (exp.get(i).contains("/")) {
+                System.out.println("osztás");
+                result = divide(Double.parseDouble(exp.get(i - 1)),Double.parseDouble(exp.get(i + 1)));
                 exp.remove(i + 1);
                 exp.remove(i);
                 exp.remove(i - 1);
@@ -117,10 +133,10 @@ public class Math {
         }
         //printList();
 
-        for (int i = 1; i < exp.size() - 1; i += 3) {
+        for (int i = 1; i < exp.size() - 1; i += 2) {
             if (exp.get(i).equals("+")) {
-                System.out.println("true" + exp.get(1).equals(null));
-                System.out.println("size: " + exp.size());
+                System.out.println("összeadás");
+
                 result = plus(Double.parseDouble(exp.get(i - 1)),Double.parseDouble(exp.get(i + 1)));
                 exp.remove(i + 1);
                 exp.remove(i);
@@ -128,16 +144,18 @@ public class Math {
                 exp.add(i - 1, Double.toString(result));
                 calculate();
             } else if (exp.get(i).equals("-")){
-                System.out.println("true" + exp.get(1).equals(null));
-                System.out.println("size: " + exp.size());
+                System.out.println("kivonás");
+
                 result = minus(Double.parseDouble(exp.get(i - 1)),Double.parseDouble(exp.get(i + 1)));
                 exp.remove(i + 1);
                 exp.remove(i);
                 exp.remove(i - 1);
                 exp.add(i - 1, Double.toString(result));
                 calculate();
-            }
+            } else System.out.println("vmi szar");
         }
+
+
         return result;
     }
 
